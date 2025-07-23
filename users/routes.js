@@ -24,7 +24,7 @@ router.get("/all",
 
 router.patch("/change-role/:userId",
     [IsAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN),
-    SchemaValidationMiddleware.verify(changeRolePayload)], UsersController.changeUserRole
+    SchemaValidationMiddleware.verify(changeRolePayload)], UsersController.changeRole
 );
 
 router.delete("/:userId",
