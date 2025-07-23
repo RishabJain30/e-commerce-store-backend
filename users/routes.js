@@ -7,15 +7,15 @@ const SchemaValidationMiddleware = require('../common/middlewares/SchemaValidati
 
 const { roles } = require("../config");
 
-router.get("/", [IsAuthenticatedMiddleware], UsersController.getUser);
+router.get("/", [IsAuthenticatedMiddleware.check], UsersController.getUser);
 
 router.get("/all",
-    [IsAuthenticatedMiddleware, CheckPermissionMiddleware.has(roles.ADMIN)],
+    [IsAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
     UsersController.getAllUsers
 );
 
 router.delete("/:userId",
-    [IsAuthenticatedMiddleware, CheckPermissionMiddleware.has(roles.ADMIN)],
+    [IsAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
     UsersController.deleteUser
 );
 
