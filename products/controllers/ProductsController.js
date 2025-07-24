@@ -13,7 +13,7 @@ module.exports = {
                     data: products,
                 });
             })
-            .catch((error) => {
+            .catch((err) => {
                 return res.status(500).json({
                     status: false,
                     error: err,
@@ -33,7 +33,7 @@ module.exports = {
                     data: product.toJSON(),
                 });
             })
-            .catch((error) => {
+            .catch((err) => {
                 return res.status(500).json({
                     status: false,
                     error: err,
@@ -51,7 +51,7 @@ module.exports = {
                     data: product.toJSON(),
                 });
             })
-            .catch((error) => {
+            .catch((err) => {
                 return res.status(500).json({
                     status: false,
                     error: err,

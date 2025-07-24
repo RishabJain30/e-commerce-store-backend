@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const ProductsController = require("./controllers/ProductsController");
 
-const isAuthenticatedMiddleware = require("./../common/middlewares/IsAuthenticatedMiddleware");
+const IsAuthenticatedMiddleware = require("./../common/middlewares/IsAuthenticatedMiddleware");
 const SchemaValidationMiddleware = require("../common/middlewares/SchemaValidationMiddleware");
 const CheckPermissionMiddleware = require("../common/middlewares/CheckPermissionMiddleware");
 
@@ -12,40 +12,40 @@ const { roles } = require("../config");
 
 router.get(
     "/",
-    [isAuthenticatedMiddleware.check],
+    [IsAuthenticatedMiddleware.check],
     ProductsController.getAllProducts
 );
 
 router.get(
   "/:productId",
-  [isAuthenticatedMiddleware.check],
-  ProductController.getProductById
+  [IsAuthenticatedMiddleware.check],
+  ProductsController.getProductById
 );
 
 router.post(
   "/",
   [
-    isAuthenticatedMiddleware.check,
+    IsAuthenticatedMiddleware.check,
     CheckPermissionMiddleware.has(roles.ADMIN),
     SchemaValidationMiddleware.verify(createProductPayload),
   ],
-  ProductController.createProduct
+  ProductsController.createProduct
 );
 
 router.patch(
   "/:productId",
   [
-    isAuthenticatedMiddleware.check,
+    IsAuthenticatedMiddleware.check,
     CheckPermissionMiddleware.has(roles.ADMIN),
     SchemaValidationMiddleware.verify(updateProductPayload),
   ],
-  ProductController.updateProduct
+  ProductsController.updateProduct
 );
 
 router.delete(
   "/:productId",
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
-  ProductController.deleteProduct
+  [IsAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
+  ProductsController.deleteProduct
 );
 
 module.exports = router;

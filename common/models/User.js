@@ -52,7 +52,7 @@ module.exports = {
     findUser: (query) => {
         return this.model.findOne({ where: query });
     },
-
+    
     updateUser: (query, updatedValue) => {
         return this.model.update(updatedValue, { where: query });
     },

@@ -8,8 +8,10 @@ const PORT = process.env.PORT || port;
 
 const AuthorisationRoutes = require('./authorisation/routes');
 const UserRoutes = require('./users/routes');
+const ProductRoutes = require('./products/routes');
 
 const UserModel = require('./common/models/User');
+const ProductModel = require('./common/models/Product');
 
 app.use(express.json());
 app.use(cors());
@@ -21,6 +23,7 @@ const sequelize = new Sequelize({
 });
 
 UserModel.initialize(sequelize);
+ProductModel.initialize(sequelize);
 
 sequelize
     .sync()
@@ -29,6 +32,7 @@ sequelize
 
         app.use('/', AuthorisationRoutes);
         app.use('/user', UserRoutes);
+        app.use('/product', ProductRoutes);
 
         app.listen(PORT, () => {
             console.log("Server listening on port:", PORT);
