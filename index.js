@@ -17,16 +17,21 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
 
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "./storage/data.db", // Path to the file that will store the SQLite DB.
+const sequelize = new Sequelize('ecommerce_db', 'root', '@Rishab2003', {
+  host: 'localhost',
+  dialect: "mysql",
 });
 
 UserModel.initialize(sequelize);
 ProductModel.initialize(sequelize);
 
 sequelize
-    .sync()
+    .authenticate()
+    .then(() => {
+        console.log('✅ Connected to MySQL 8.0 successfully.');
+
+        return sequelize.sync(); // proceed to sync tables
+    })
     .then(() => {
         console.log("sequelize initialized!!");
 
