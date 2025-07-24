@@ -8,6 +8,8 @@ const CheckPermissionMiddleware = require("../common/middlewares/CheckPermission
 
 const createProductPayload = require("./schemas/createProductPayload");
 const updateProductPayload = require("./schemas/updateProductPayload");
+const createVariantPayload = require("./schemas/createVariantPayload");
+const updateVariantPayload = require("./schemas/updateVariantPayload");
 const { roles } = require("../config");
 
 router.get(
@@ -22,6 +24,12 @@ router.get(
   ProductsController.getProductById
 );
 
+router.get(
+    "/:productId/variants",
+    [IsAuthenticatedMiddleware.check],
+    ProductsController.getProductVariants
+)
+
 router.post(
   "/",
   [
@@ -31,6 +39,16 @@ router.post(
   ],
   ProductsController.createProduct
 );
+
+router.post(
+    "/:productId/variants",
+    [
+        IsAuthenticatedMiddleware.check,
+        CheckPermissionMiddleware.has(roles.ADMIN),
+        SchemaValidationMiddleware.verify(createVariantPayload),
+    ],
+    ProductsController.createProductVariant
+)
 
 router.patch(
   "/:productId",
@@ -42,10 +60,26 @@ router.patch(
   ProductsController.updateProduct
 );
 
+router.patch(
+  "/:productId/variants/:variantId",
+  [
+    IsAuthenticatedMiddleware.check,
+    CheckPermissionMiddleware.has(roles.ADMIN),
+    SchemaValidationMiddleware.verify(updateVariantPayload),
+  ],
+  ProductsController.updateProductVariant
+);
+
 router.delete(
   "/:productId",
   [IsAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
   ProductsController.deleteProduct
+);
+
+router.delete(
+  "/:productId/variants/:variantId",
+  [IsAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
+  ProductsController.deleteProductVariant
 );
 
 module.exports = router;

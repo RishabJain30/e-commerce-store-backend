@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { productPriceUnits } = require("../../config");
-const { initialize } = require("./User");
 
 ProductModel = {
     id: {

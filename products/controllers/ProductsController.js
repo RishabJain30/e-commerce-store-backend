@@ -1,4 +1,5 @@
 const ProductModel = require("../../common/models/Product");
+const ProductVariantModel = require("../../common/models/ProductVariant");
 
 module.exports = {
     getAllProducts: (req, res) => {
@@ -112,5 +113,95 @@ module.exports = {
             error: err,
             });
         });
+    },
+
+    getProductVariants: (req, res) => {
+        const {
+            params: { productId }
+        } = req;
+
+        ProductVariantModel.findAllVariants({ productId })
+            .then((variants) => {
+                return res.status(200).json({
+                    status: true,
+                    data: variants,
+                });
+            })
+            .catch((err) => {
+                return res.status(500).json({
+                    status: false,
+                    error: err,
+                });
+            });
+    },
+
+    createProductVariant: (req, res) => {
+        const {
+            body,
+            params: { productId }
+        } = req;
+
+        ProductModel.findProduct({ id: productId })
+            .then((product) => {
+                if (!product) {
+                    res.status(404).json({
+                    status: false,
+                    error: { message: "Product not found." },
+                    });
+                    return;
+                }
+                return ProductVariantModel.createVariant({ ...body, productId });
+            })
+            .then((variant) => {
+                return res.status(200).json({
+                    status: true,
+                    data: variant.toJSON(),
+                });
+            })
+            .catch((err) => {
+                return res.status(500).json({
+                    status: false,
+                    error: err,
+                });
+            });
+    },
+
+    updateProductVariant: (req, res) => {
+        const {
+            params: { productId, variantId },
+            body: payload
+        } = req;
+
+        if(!Object.keys(payload.length)){
+            return res.status(400).json({
+                status: false,
+                error: {
+                    message: "Body is empty, hence can not update the product variant.",
+                },
+            })
+        }
+
+        ProductVariantModel.updateVariant({ id: variantId, productId }, payload)
+            .then(() => {
+                return ProductVariantModel.findVariant({ id: variantId, productId });
+            })
+            .then((variant) => {
+                if (!variant) {
+                    return res.status(404).json({
+                    status: false,
+                    error: { message: "Variant not found." }
+                    });
+                }
+                return res.status(200).json({
+                    status: true,
+                    data: variant.toJSON(),
+                });
+            })
+            .catch((err) => {
+                return res.status(500).json({
+                    status: false,
+                    error: err,
+                });
+            });
     }
 }

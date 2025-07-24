@@ -10,5 +10,10 @@ module.exports = {
     DOLLAR: 'dollar',
     EURO: 'euro',
     INR: 'inr'
+  },
+  productSize: {
+    LARGE: 'large',
+    MEDIUM: 'medium',
+    SMALL: 'small'
   }
 }
