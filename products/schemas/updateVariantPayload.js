@@ -12,6 +12,5 @@ module.exports = {
             minLength: 1,
         },
     },
-    required: ["size", "color"],
     additionalProperties: false,
 };

@@ -12,6 +12,7 @@ const ProductRoutes = require('./products/routes');
 
 const UserModel = require('./common/models/User');
 const ProductModel = require('./common/models/Product');
+const ProductVariantModel = require('./common/models/ProductVariant');
 
 app.use(express.json());
 app.use(cors());
@@ -23,7 +24,23 @@ const sequelize = new Sequelize('ecommerce_db', 'root', '@Rishab2003', {
 });
 
 UserModel.initialize(sequelize);
-ProductModel.initialize(sequelize);
+const productModel = ProductModel.initialize(sequelize);
+const productVariantModel = ProductVariantModel.initialize(sequelize);
+
+// Set up associations after all models are initialized
+const models = {
+    Product: productModel,
+    ProductVariant: productVariantModel,
+    User: UserModel.model
+};
+
+// Call associate methods if they exist
+if (ProductModel.associate) {
+    ProductModel.associate(models);
+}
+if (ProductVariantModel.associate) {
+    ProductVariantModel.associate(models);
+}
 
 sequelize
     .authenticate()

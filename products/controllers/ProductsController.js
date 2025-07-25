@@ -172,13 +172,13 @@ module.exports = {
             body: payload
         } = req;
 
-        if(!Object.keys(payload.length)){
+        if(!Object.keys(payload).length){
             return res.status(400).json({
                 status: false,
                 error: {
                     message: "Body is empty, hence can not update the product variant.",
                 },
-            })
+            });
         }
 
         ProductVariantModel.updateVariant({ id: variantId, productId }, payload)
@@ -195,6 +195,28 @@ module.exports = {
                 return res.status(200).json({
                     status: true,
                     data: variant.toJSON(),
+                });
+            })
+            .catch((err) => {
+                return res.status(500).json({
+                    status: false,
+                    error: err,
+                });
+            });
+    },
+
+    deleteProductVariant: (req, res) => {
+        const {
+            params: { productId, variantId }
+        } = req;
+
+        ProductVariantModel.deleteVariant({ id: variantId, productId })
+            .then((numberOfEntriesDeleted) => {
+                return res.status(200).json({
+                    status: true,
+                    data: {
+                        numberOfVariantsDeleted: numberOfEntriesDeleted
+                    },
                 });
             })
             .catch((err) => {

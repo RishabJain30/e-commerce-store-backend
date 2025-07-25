@@ -12,8 +12,11 @@ module.exports = {
     INR: 'inr'
   },
   productSize: {
-    LARGE: 'large',
+    XS: 'xs',
+    SMALL: 'small',
     MEDIUM: 'medium',
-    SMALL: 'small'
+    LARGE: 'large',
+    XL: 'xl',
+    XXL: 'xxl'
   }
 }

@@ -31,8 +31,18 @@ ProductModel = {
 };
 
 module.exports = {
+    model: null, // Will be set during initialization
+    
     initialize: (sequelize) => {
         this.model = sequelize.define("product", ProductModel);
+        return this.model;
+    },
+
+    associate: (models) => {
+        this.model.hasMany(models.ProductVariant, {
+            foreignKey: 'productId',
+            as: 'variants'
+        });
     },
 
     createProduct: (product) => {
