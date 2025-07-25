@@ -5,12 +5,21 @@ const ProductsController = require("./controllers/ProductsController");
 const IsAuthenticatedMiddleware = require("./../common/middlewares/IsAuthenticatedMiddleware");
 const SchemaValidationMiddleware = require("../common/middlewares/SchemaValidationMiddleware");
 const CheckPermissionMiddleware = require("../common/middlewares/CheckPermissionMiddleware");
+const customRateLimiter = require("../common/middlewares/CustomRateLimiter");
 
 const createProductPayload = require("./schemas/createProductPayload");
 const updateProductPayload = require("./schemas/updateProductPayload");
 const createVariantPayload = require("./schemas/createVariantPayload");
 const updateVariantPayload = require("./schemas/updateVariantPayload");
 const { roles } = require("../config");
+
+const productRateLimiter = customRateLimiter({
+    limit: 5,
+    windowSeconds: 60,
+    keyGenerator: (req) => req.user?.id || req.ip  // user specific or fallback to IP
+});
+
+router.use("/", productRateLimiter);
 
 router.get(
     "/",
